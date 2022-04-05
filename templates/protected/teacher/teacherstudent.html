@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Latest compiled and minified CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link href="{{ url_for('static', path='/style.css') }}" rel="stylesheet">
+    <title>Marks</title>
+</head>
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="/teacher" class="active">Home</a> 
+        <a href="#myModal" data-bs-toggle="modal" data-bs-target="#myModal">Bulk Update</a>
+        <a href="/docs">Docs</a>
+        <a href="/changepassword">Change Password</a>
+        <a href="/logout">Logout</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+        </a>
+  </div>
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1> Name : {{teacher.fullname}}</h1>
+                <h2>ID : {{teacher.id}}</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>Subject : {{subject.subjectname}}</h1>
+                <h2>ID : {{subject.subjectid}}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="container card mt-4 align-items-center">
+        <div class="card-body d-flex flex-row justify-content-between ">
+            {% if students != None %}
+            <style type="text/css">
+                .tg  {border-collapse:collapse;border-color:#aaa;border-spacing:0;}
+                .tg td{background-color:#fff;border-color:#aaa;border-style:solid;border-width:0px;color:#333;
+                  font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 16px;word-break:normal;}
+                .tg th{background-color:#f38630;border-color:#aaa;border-style:solid;border-width:0px;color:#fff;
+                  font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 16px;word-break:normal;}
+                .tg .tg-i40o{border-color:#fffe65;text-align:left;vertical-align:top}
+                .tg .tg-wp8o{border-color:#000000;text-align:center;vertical-align:top}
+                .tg .tg-73oq{border-color:#000000;text-align:left;vertical-align:top}
+                .tg .tg-gpog{border-color:#ffccc9;text-align:left;vertical-align:top}
+                .tg .tg-muar{border-color:#fe996b;text-align:center;vertical-align:top}
+                .tg .tg-feht{background-color:#ffccc9;border-color:#000000;text-align:left;vertical-align:top}
+                </style>
+                <table class="tg">
+                <thead>
+                  <tr>
+                    <th class="tg-73oq" rowspan="2">Student ID</th>
+                    <th class="tg-gpog">ISE</th>
+                    <th class="tg-muar">MSE</th>
+                    <th class="tg-wp8o">ESE</th>
+                    <th class="tg-wp8o">TOTAL</th>
+                    <th class="tg-wp8o">GRADE</th>
+                  </tr>
+                  <tr>
+                    <th class="tg-gpog">{{subject.isemax}}</th>
+                    <th class="tg-muar">{{subject.msemax}}</th>
+                    <th class="tg-wp8o">{{subject.esemax}}</th>
+                    <th class="tg-wp8o">{{subject.totalmax}}</th>
+                    <th class="tg-wp8o"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for student in students %}
+                  <tr>
+                    <td class="tg-feht">{{student.id}}</td>
+                    <td class="tg-73oq">{{student.ise}}</td>
+                    <td class="tg-i40o">{{student.mse}}</td>
+                    <td class="tg-i40o">{{student.ese}}</td>
+                    <td class="tg-i40o">{{student.total}}</td>
+                    <td class="tg-i40o">{{student.grade}}</td>
+                    <td class="tg-i40o">
+                        <button type="button" class="btn btn-primary mb-2" onclick="window.location.href='/teacher/{{student.id}}/{{subject.subjectid}}';">EDIT</button>
+                    </td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+                {% else %}
+                <h3>No students present</h3>
+                {% endif %}
+        </div>
+    </div>
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"  style="color: brown;">Add Bulk Marks</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/bulkmarks/{{subject.subjectid}}" method="POST" enctype="multipart/form-data" id="bulkmrk">
+                        <a href="/download_mark_template" class="form-control">Download Template</a>
+                        <label>Enter csv file similar to template</label>
+                        <input type="file" id="bulkfile" name="bulkfile" accept="text/csv" class="form-control">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" form="bulkmrk">UPLOAD</button>                    
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">CLOSE</button>
+                </div>
+        </div>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{{ url_for('static', path='/script.js') }}"></script>
+<!-- Latest compiled JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+</html>
