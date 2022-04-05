@@ -40,7 +40,7 @@ pyparsing
 python-dotenv
 python-jose
 python-multipart
-PyYAM
+PyYAML
 redis
 rfc3986
 rsa
