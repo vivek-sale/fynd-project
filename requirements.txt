@@ -21,7 +21,7 @@ fakeredis==1.7.1
 fastapi==0.75.0
 fastapi-mail==1.0.6
 greenlet==1.1.2
-h11==0.13.0
+h11
 httpcore==0.14.7
 httptools==0.4.0
 httpx==0.22.0
