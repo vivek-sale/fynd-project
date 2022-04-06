@@ -1,19 +1,19 @@
 from fastapi import APIRouter, UploadFile,status, Depends, Form, Request, File
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
-from ..database.database import get_db
+from app.database.database import get_db
 from fastapi.templating import Jinja2Templates
-from ..database import model
-from ..metadata import schema
-from ..database.crud import subjectdata, userdata, classdata
+from app.database import model
+from app.metadata import schema
+from app.database.crud import subjectdata, userdata, classdata
 from sqlalchemy.orm import Session
-from ..auth.oauth2 import get_current_user
-from ..utils.marks_validator import marks_validator
+from app.auth.oauth2 import get_current_user
+from app.utils.marks_validator import marks_validator
 
 router = APIRouter(tags=['Student'])
 
 templates = Jinja2Templates(directory="templates")
 
-
+# Marklist creation route
 @router.get('/marksheet/{id}', status_code=status.HTTP_202_ACCEPTED, description='This route renders a marksheet for the student. Admin and student both can access this route')
 def get_marklist(request : Request, id : str, db : Session = Depends(get_db)):
     token_data = None
@@ -40,11 +40,12 @@ def get_marklist(request : Request, id : str, db : Session = Depends(get_db)):
 
     for subject in subjects:
         maxmarks += subject.totalmax
-
+    # Calculating maximum marks of all available subjects
     total_marks = 0
 
     for mark in marks:
         total_marks += mark.total
-
+    # Calculating total marks got by student
     finalgrade = marks_validator(int((total_marks/maxmarks)*100), str(model.DEFAULT_GRADE_PARAMETERS))
+    # Assigning a final grade
     return templates.TemplateResponse('marksheet.html' ,{'request' : request, 'student':student,'marks':marks, 'subjects':subjects, 'maxmarks':maxmarks, 'total_marks':total_marks, 'finalgrade':finalgrade, 'role':token_data.role})

@@ -1,7 +1,8 @@
 from fastapi_mail import MessageSchema, FastMail, ConnectionConfig
 from fastapi import BackgroundTasks
-from ..metadata.config import settings
+from app.metadata.config import settings
 
+# Config file to set connection to email server in this case gmail
 conf = ConnectionConfig(
     MAIL_USERNAME=settings.mail_username,
     MAIL_PASSWORD= settings.mail_password,
@@ -14,6 +15,7 @@ conf = ConnectionConfig(
 
 
 def send_mail_to_teacher(backgroundtask : BackgroundTasks, emailid : str, name : str, subject : str):
+    # mail with attributes
     message = MessageSchema(
         subject=f'Admin has invited you to contribute on {subject} for class 7',
         recipients=[emailid],
@@ -25,4 +27,5 @@ def send_mail_to_teacher(backgroundtask : BackgroundTasks, emailid : str, name :
         subtype='html',
     )
     fm = FastMail(conf)
+    # Background task runs independently in the background until completion
     backgroundtask.add_task(fm.send_message, message)

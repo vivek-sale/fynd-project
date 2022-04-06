@@ -1,22 +1,17 @@
-from urllib import response
 from fastapi import APIRouter, UploadFile, status, Depends, Form, Request, File
-from fastapi.responses import HTMLResponse, RedirectResponse, FileResponse
+from fastapi.responses import RedirectResponse, FileResponse
 from fastapi.templating import Jinja2Templates
-
-from app.utils.marks_validator import marks_validator
-from ..database.database import get_db
-from ..auth.oauth2 import get_current_user
-from ..database import model
-from ..metadata import schema
-from ..database.crud import subjectdata, userdata, classdata
+from app.database.database import get_db
+from app.auth.oauth2 import get_current_user
+from app.database.crud import subjectdata, userdata, classdata
 from sqlalchemy.orm import Session
 
 router = APIRouter(tags=['Teacher'])
 
 templates = Jinja2Templates(directory="templates")
 
-
-@router.get('/teacher', status_code=status.HTTP_202_ACCEPTED)
+# Rendering teacherhome route
+@router.get('/teacher', status_code=status.HTTP_202_ACCEPTED, description='Rendering homepage for teacher to choose all subjects he has been assigned for the class.')
 async def load_subjects(request: Request, db: Session = Depends(get_db)):
     token_data = None
     try:
@@ -26,14 +21,15 @@ async def load_subjects(request: Request, db: Session = Depends(get_db)):
         return RedirectResponse('/404', status_code=303)
     if token_data.role != 'TEACHER':
         return RedirectResponse('/404', status_code=303)
-
+    # Validate teacher
     subjects = subjectdata.get_subject_for_teacher(teacherid=token_data.id, db=db)
     teacher = userdata.get_student_from_id(id=token_data.id, db=db)
     return templates.TemplateResponse('protected/teacher/teacherhome.html',
                                       {'request': request, 'teacher': teacher, 'subjects': subjects})
 
 
-@router.get('/teacher/{subjectid}', status_code=status.HTTP_202_ACCEPTED)
+# Go to specific subject of a teacher
+@router.get('/teacher/{subjectid}', status_code=status.HTTP_202_ACCEPTED, description='Getting page for teacher which has marks of subject oa all students.')
 async def show_students(request: Request, subjectid: str, db: Session = Depends(get_db)):
     token_data = None
     try:
@@ -47,13 +43,13 @@ async def show_students(request: Request, subjectid: str, db: Session = Depends(
     students = classdata.get_all_marks_subject(subjectid=subjectid, db=db)
     subject = subjectdata.get_subject_from_id(subjectid=subjectid, db=db)
     teacher = userdata.get_student_from_id(id=token_data.id, db=db)
-    # return {'students':students, 'subject': subject}
     return templates.TemplateResponse('protected/teacher/teacherstudent.html',
                                       {'request': request, 'students': students, 'subject': subject,
                                        'teacher': teacher})
 
 
-@router.get('/teacher/{studentid}/{subjectid}', status_code=202)
+# Getting page for editing marks of a subject of teacher
+@router.get('/teacher/{studentid}/{subjectid}', status_code=202, description='Contains form for editing marks with given constraints.')
 async def load_marks(request: Request, subjectid: str, studentid: str, db: Session = Depends(get_db)):
     token_data = None
     try:
@@ -65,12 +61,14 @@ async def load_marks(request: Request, subjectid: str, studentid: str, db: Sessi
         return RedirectResponse('/404', status_code=303)
 
     subject = subjectdata.get_subject_from_id(subjectid=subjectid, db=db)
+    # Got subject information for max parameters
     marks = classdata.get_marks_for_student_of_subject(studentid=studentid, subjectid=subjectid, db=db)
     return templates.TemplateResponse('protected/teacher/teacherupdate.html',
                                       {'request': request, 'subject': subject, 'marks': marks})
 
 
-@router.post('/teacher/{studentid}/{subjectid}', status_code=202)
+# Post response for updating marks
+@router.post('/teacher/{studentid}/{subjectid}', status_code=202, description='Route for updating marks. Parameters get checked at front end for validation.')
 async def update_marks(request: Request, subjectid: str, studentid: str, ise: int = Form(...), mse: int = Form(...),
                        ese: int = Form(...), db: Session = Depends(get_db)):
     token_data = None
@@ -88,7 +86,7 @@ async def update_marks(request: Request, subjectid: str, studentid: str, ise: in
     return None
 
 
-@router.get('/download_mark_template', status_code=302)
+@router.get('/download_mark_template', status_code=302, description='Downloading template for marks')
 async def download_template(request: Request, db: Session = Depends(get_db)):
     token_data = None
     try:
@@ -103,7 +101,8 @@ async def download_template(request: Request, db: Session = Depends(get_db)):
                         filename='template_marks.csv')
 
 
-@router.post('/bulkmarks/{subjectid}', status_code=status.HTTP_201_CREATED)
+# Uploading marks in a file
+@router.post('/bulkmarks/{subjectid}', status_code=status.HTTP_201_CREATED, description='File is recieved in given formart and read and sent for validation with given criterion and sorted if successful on another page.')
 async def bulk_load_marks(request: Request, subjectid: str, bulkfile: UploadFile = File(...),
                           db: Session = Depends(get_db)):
     token_data = None
@@ -116,8 +115,11 @@ async def bulk_load_marks(request: Request, subjectid: str, bulkfile: UploadFile
         return RedirectResponse('/404', status_code=303)
 
     bulk_list = await bulkfile.read()
+    # File read function
     bulk_list = bulk_list.decode()
+    # Converting encoded string to str
     marklist = bulk_list.split()
+    # Splitting file at spaces and dropping first 5 places as per template
     marklist = marklist[5:]
     summary = classdata.bulkupload_marks(marklist=marklist, subjectid=subjectid, db=db)
     return templates.TemplateResponse('protected/teacher/teacherloadsummary.html',

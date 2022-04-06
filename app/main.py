@@ -2,7 +2,7 @@ from fastapi import FastAPI, APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from .routers import login, user, admin, student, teacher
+from app.routers import login, user, admin, student, teacher
 
 
 app = FastAPI(title="ABCXYZ School Results",
@@ -12,19 +12,19 @@ app = FastAPI(title="ABCXYZ School Results",
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-
+# Router is used to attach different apps to first process
 app.include_router(login.router)
 app.include_router(user.router)
 app.include_router(admin.router)
 app.include_router(teacher.router)
 app.include_router(student.router)
 
-
+# Rendering the home route
 @app.get('/', status_code=200, response_class=HTMLResponse, description='This is the home route')
 async def homepage(request: Request):
     return templates.TemplateResponse('unprotected/homepage.html', {'request': request, 'message': 'Welcome'})
 
-
+# In case of authorization failure this template is rendered
 @app.get('/404', status_code=200, response_class=HTMLResponse,
          description='This route is called when there is any unauthorised response like expiration of cookie, accessing unauthorised route etc.')
 async def homepage(request: Request):

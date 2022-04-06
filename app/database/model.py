@@ -15,7 +15,7 @@ DEFAULT_GRADE_PARAMETERS = {
     'F': [1, 40]
 }
 
-
+# Table for main
 class MainDB(Base):
     __tablename__ = 'maindb'
 
