@@ -1,0 +1,9 @@
+language = "python3"
+run = "uvicorn app.main:app --host=0.0.0.0 --port=${PORT:-5000}"
+
+[env]
+VIRTUAL_ENV = "/home/runner/${REPL_SLUG}/venv"
+PATH = "${VIRTUAL_ENV}/bin"
+PYTHONPATH="${VIRTUAL_ENV}/lib/python3.8/site-packages"
+REPLIT_POETRY_PYPI_REPOSITORY="https://package-proxy.replit.com/pypi/"
+MPLBACKEND="TkAgg"
