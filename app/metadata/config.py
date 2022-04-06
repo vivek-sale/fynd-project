@@ -16,6 +16,8 @@ class Settings(BaseSettings):
     default_grade_parameters: str = str(DEFAULT_GRADE_PARAMETERS)
     mail_username: str
     mail_password: str
+    mark_template_path: str
+    student_template_path: str 
 
     class Config:
         env_file = ".env"

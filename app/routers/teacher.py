@@ -5,6 +5,7 @@ from app.database.database import get_db
 from app.auth.oauth2 import get_current_user
 from app.database.crud import subjectdata, userdata, classdata
 from sqlalchemy.orm import Session
+from app.metadata.config import settings
 
 router = APIRouter(tags=['Teacher'])
 
@@ -97,7 +98,7 @@ async def download_template(request: Request, db: Session = Depends(get_db)):
     if token_data.role != 'TEACHER':
         return RedirectResponse('/404', status_code=303)
 
-    return FileResponse(r'C:\Users\Vivek\Desktop\Fastapp\resources\template_marks.csv', media_type='text/csv',
+    return FileResponse(settings.mark_template_path, media_type='text/csv',
                         filename='template_marks.csv')
 
 

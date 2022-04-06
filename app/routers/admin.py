@@ -9,6 +9,7 @@ from app.metadata import schema
 from app.database.crud import subjectdata, userdata, classdata
 from sqlalchemy.orm import Session
 from app.bg_tasks.sendteachmail import send_mail_to_teacher
+from app.metadata.config import settings
 
 router = APIRouter(tags=['Admin'])
 
@@ -168,7 +169,7 @@ async def get_template(request: Request, db: Session = Depends(get_db)):
         return RedirectResponse('/404', status_code=303)
     if token_data.role != 'ADMIN':
         return RedirectResponse('/404', status_code=303)
-    return FileResponse('https://github.com/vivek-sale/fynd-project/blob/main/resources/template_marks.csv', media_type='text/csv',
+    return FileResponse(settings.student_template_path, media_type='text/csv',
                         filename='template_student.csv')
 
 
