@@ -9,7 +9,7 @@ from app.database import model
 from app.metadata import schema
 from app.utils.marks_validator import marks_validator
 
-errors: dict = {'success': [], 'repeat': [], 'invalid': []}
+
 # This file contains all the database operations on classdata table
 
 def extract(studentlst: list, db: Session = Depends(get_db)):

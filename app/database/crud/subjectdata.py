@@ -39,9 +39,12 @@ def delete_subject(subjectid: str, db: Session = Depends(get_db)):
         # get info on teacher as list if len(list) > 1 then skip deleting from logininfo
         teacher = db.query(model.SubjectData).filter(model.SubjectData.teacherid == subjectteach.teacherid).all()
         if len(teacher) == 1:
-            lgninfo = db.query(model.LoginData).filter(model.LoginData.id == subjectteach.teacherid).first()
-            db.delete(lgninfo)
-            db.commit()
+            try:
+                lgninfo = db.query(model.LoginData).filter(model.LoginData.id == subjectteach.teacherid).first()
+                db.delete(lgninfo)
+                db.commit()
+            except:
+                print('Already deleted')
         else:
             print('skipped')
         # Delete subject from class for all students
@@ -52,8 +55,7 @@ def delete_subject(subjectid: str, db: Session = Depends(get_db)):
         subject = db.query(model.SubjectData).get(subjectid)
         db.delete(subject)
         db.commit()
-    except:
-        db.rollback()
+    except Exception as e:
         return False
     return True
 

@@ -75,7 +75,6 @@ async def delete_subject(request: Request, id: str, db: Session = Depends(get_db
         return RedirectResponse('/404', status_code=303)
     if token_data.role != 'ADMIN':
         return RedirectResponse('/404', status_code=303)
-
     is_succeeded = subjectdata.delete_subject(subjectid=id, db=db)
     if not is_succeeded:
         return {'Message': 'Failed to delete'}

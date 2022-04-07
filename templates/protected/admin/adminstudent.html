@@ -122,7 +122,18 @@
 
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{{ url_for('static', path='/script.js') }}"></script>
-<!-- Latest compiled JavaScript -->
+<script>
+    
+  async function deleteStudent(id) {
+    var del = confirm("Are you sure want to delete student "+id);
+    if (del){
+      const res = await fetch("/admin/student/delete/" + id, {
+        method: "DELETE",
+      }).then((response) => response.json());
+      window.location.reload();
+      }
+    }
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
 </html>
