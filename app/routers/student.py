@@ -21,9 +21,9 @@ def get_marklist(request : Request, id : str, db : Session = Depends(get_db)):
         token : str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role not in  ('ADMIN', 'STUDENT'):
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     student = userdata.get_student_from_id(id=id, db=db)
 
     if not student:

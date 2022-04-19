@@ -51,7 +51,7 @@ async def user_login(request: Request, invalid: bool = False):
 # Deleting cookie and redirecting to login page
 @router.get('/logout', description='Used for deleting the cookie assigned to user')
 async def user_logout(request: Request, response: Response):
-    response = RedirectResponse('/login', status_code=303)
+    response = RedirectResponse('/login', status_code=302)
     response.delete_cookie('access_token')
     return response
 
@@ -64,9 +64,9 @@ async def user_change_password(request: Request, invalid: bool = False, db: Sess
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role not in ('ADMIN', 'TEACHER'):
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     return templates.TemplateResponse('protected/change_password.html',
                                       {'request': request, 'role': token_data.role, 'invalid': invalid})
 
@@ -81,17 +81,17 @@ async def chnage_password(request: Request, old_password: str = Form(...), new_p
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role not in ('ADMIN', 'TEACHER'):
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
 
     user = get_user(username=token_data.id, db=db)
     # Getting userdata
     if not user:
         # Similar to login
-        return RedirectResponse(url='/changepassword?invalid=True', status_code=status.HTTP_303_SEE_OTHER)
+        return RedirectResponse(url='/changepassword?invalid=True', status_code=301)
     if not verify(old_password, user.password):
-        return RedirectResponse(url='/changepassword?invalid=True', status_code=303)
+        return RedirectResponse(url='/changepassword?invalid=True', status_code=301)
     # New password is hashed and sent to db
     user.password = hash(new_password)
     db.commit()

@@ -25,10 +25,10 @@ async def fetch_subjects(request: Request, db: Session = Depends(get_db)):
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
         # Errors like cookie expiration, token expiry caught here
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
         # Role specific route if another user comes here caught and sent to 404
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     subjects = subjectdata.get_all_subjects(db=db)
     teachers = userdata.get_all_teachers(db=db)
     return templates.TemplateResponse('protected/admin/adminhome.html',
@@ -44,9 +44,9 @@ async def load_subjects(request: Request, backgroundtask: BackgroundTasks,
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     new_subject = subjectdata.create_subject(subject=subject, db=db)
     if not new_subject:
         # Already present subjectname
@@ -72,9 +72,9 @@ async def delete_subject(request: Request, id: str, db: Session = Depends(get_db
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     is_succeeded = subjectdata.delete_subject(subjectid=id, db=db)
     if not is_succeeded:
         return {'Message': 'Failed to delete'}
@@ -92,9 +92,9 @@ async def fetch_subjects(id: str, request: Request, db: Session = Depends(get_db
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     subject = db.query(model.SubjectData).filter(model.SubjectData.subjectid == id).first()
     teachers = db.query(model.MainDB).filter(model.MainDB.role == 'TEACHER').all()
     return templates.TemplateResponse('protected/admin/adminupdate.html',
@@ -110,9 +110,9 @@ async def update_subject(request: Request, id: str, subject: schema.Subject = De
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     is_succeded = subjectdata.update_subject(subject=subject, db=db)
     if is_succeded == False:
         return RedirectResponse(f'/admin/update/{id}', status_code=303)
@@ -127,9 +127,9 @@ async def load_students(request: Request, db: Session = Depends(get_db)):
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     students = userdata.get_all_students_from_class(db=db)
     classdt = classdata.get_all_marks(db=db)
     subjectnames = subjectdata.get_all_subject_id(db=db)
@@ -146,9 +146,9 @@ async def add_students(request: Request, students: str = Form(...), db: Session 
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if not students:
         return RedirectResponse('/admin/students', {'message': 'No new students added'})
     # Multiple students can be added at the same time with comma separation
@@ -165,9 +165,9 @@ async def get_template(request: Request, db: Session = Depends(get_db)):
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     return FileResponse(settings.student_template_path, media_type='text/csv',
                         filename='template_student.csv')
 
@@ -180,9 +180,9 @@ async def bulk_load(request: Request, bulkfile: UploadFile = File(...), db: Sess
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     bulk_list = await bulkfile.read()
     bulk_list = bulk_list.decode()
     studlist = bulk_list.split()
@@ -199,9 +199,9 @@ async def delete_student(request: Request, id: str, db: Session = Depends(get_db
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'ADMIN':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     is_succeeded = classdata.delete_student(id=id, db=db)
     if not is_succeeded:
         return {'Message': 'Failed to delete'}

@@ -19,9 +19,9 @@ async def load_subjects(request: Request, db: Session = Depends(get_db)):
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'TEACHER':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     # Validate teacher
     subjects = subjectdata.get_subject_for_teacher(teacherid=token_data.id, db=db)
     teacher = userdata.get_student_from_id(id=token_data.id, db=db)
@@ -37,9 +37,9 @@ async def show_students(request: Request, subjectid: str, db: Session = Depends(
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'TEACHER':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
 
     students = classdata.get_all_marks_subject(subjectid=subjectid, db=db)
     subject = subjectdata.get_subject_from_id(subjectid=subjectid, db=db)
@@ -57,9 +57,9 @@ async def load_marks(request: Request, subjectid: str, studentid: str, db: Sessi
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'TEACHER':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
 
     subject = subjectdata.get_subject_from_id(subjectid=subjectid, db=db)
     # Got subject information for max parameters
@@ -77,9 +77,9 @@ async def update_marks(request: Request, subjectid: str, studentid: str, ise: in
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'TEACHER':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
 
     is_succeeded = classdata.update_marks(studentid=studentid, subjectid=subjectid, ise=ise, mse=mse, ese=ese, db=db)
     if is_succeeded == True:
@@ -94,9 +94,9 @@ async def download_template(request: Request, db: Session = Depends(get_db)):
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'TEACHER':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
 
     return FileResponse(settings.mark_template_path, media_type='text/csv',
                         filename='template_marks.csv')
@@ -111,9 +111,9 @@ async def bulk_load_marks(request: Request, subjectid: str, bulkfile: UploadFile
         token: str = request.cookies.get('access_token')
         token_data = get_current_user(session=token, db=db)
     except Exception as e:
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
     if token_data.role != 'TEACHER':
-        return RedirectResponse('/404', status_code=303)
+        return RedirectResponse('/404', status_code=301)
 
     bulk_list = await bulkfile.read()
     # File read function
