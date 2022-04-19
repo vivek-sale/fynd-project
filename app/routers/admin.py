@@ -153,6 +153,7 @@ async def add_students(request: Request, students: str = Form(...), db: Session 
         return RedirectResponse('/admin/students', {'message': 'No new students added'})
     # Multiple students can be added at the same time with comma separation
     studlist = students.split(',')
+    studlist = [stud.upper() for stud in studlist]
     summary = classdata.extract(studentlst=studlist, db=db)
     return templates.TemplateResponse('/protected/admin/adminloadstud.html', {'request': request, 'summary': summary})
 
@@ -187,6 +188,7 @@ async def bulk_load(request: Request, bulkfile: UploadFile = File(...), db: Sess
     bulk_list = bulk_list.decode()
     studlist = bulk_list.split()
     studlist.pop(0)
+    studlist = [stud.upper() for stud in studlist]
     summary = classdata.extract(studentlst=studlist, db=db)
     return templates.TemplateResponse('/protected/admin/adminloadstud.html', {'request': request, 'summary': summary})
 

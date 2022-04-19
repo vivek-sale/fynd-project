@@ -10,7 +10,6 @@ app = FastAPI(title="ABCXYZ School Results",
               description="This module is designed to make it easy for teachers to upload their final marks as well as for classteacher to review them as well as for students to see their result"
               )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 # Router is used to attach different apps to first process
 app.include_router(login.router)

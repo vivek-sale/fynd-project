@@ -122,6 +122,7 @@ async def bulk_load_marks(request: Request, subjectid: str, bulkfile: UploadFile
     marklist = bulk_list.split()
     # Splitting file at spaces and dropping first 5 places as per template
     marklist = marklist[5:]
+    marklist = [mark.upper() for mark in marklist]
     summary = classdata.bulkupload_marks(marklist=marklist, subjectid=subjectid, db=db)
     return templates.TemplateResponse('protected/teacher/teacherloadsummary.html',
                                       {'request': request, 'summary': summary})
