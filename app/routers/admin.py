@@ -119,7 +119,7 @@ async def update_subject(request: Request, id: str, subject: schema.Subject = De
 
 
 # Method to load the students page
-@router.get('/admin/students', status_code=status.HTTP_200_OK, response_class=HTMLResponse, description='This route fetches the data required to display students like userdata pf student, subjects and marks and displays it in tabular format on front end.')
+@router.get('/admin/student', status_code=status.HTTP_200_OK, description='This route fetches the data required to display students like userdata pf student, subjects and marks and displays it in tabular format on front end.')
 async def load_students(request: Request, db: Session = Depends(get_db)):
     token_data = None
     try:
