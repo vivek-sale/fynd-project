@@ -29,6 +29,7 @@ async def load_subjects(request: Request, db: Session = Depends(get_db)):
                                       {'request': request, 'teacher': teacher, 'subjects': subjects})
 
 
+
 # Go to specific subject of a teacher
 @router.get('/teacher/{subjectid}', status_code=status.HTTP_202_ACCEPTED, description='Getting page for teacher which has marks of subject oa all students.')
 async def show_students(request: Request, subjectid: str, db: Session = Depends(get_db)):
@@ -47,6 +48,7 @@ async def show_students(request: Request, subjectid: str, db: Session = Depends(
     return templates.TemplateResponse('protected/teacher/teacherstudent.html',
                                       {'request': request, 'students': students, 'subject': subject,
                                        'teacher': teacher})
+
 
 
 # Getting page for editing marks of a subject of teacher
@@ -68,6 +70,7 @@ async def load_marks(request: Request, subjectid: str, studentid: str, db: Sessi
                                       {'request': request, 'subject': subject, 'marks': marks})
 
 
+
 # Post response for updating marks
 @router.post('/teacher/{studentid}/{subjectid}', status_code=202, description='Route for updating marks. Parameters get checked at front end for validation.')
 async def update_marks(request: Request, subjectid: str, studentid: str, ise: int = Form(...), mse: int = Form(...),
@@ -87,6 +90,7 @@ async def update_marks(request: Request, subjectid: str, studentid: str, ise: in
     return None
 
 
+
 @router.get('/download_mark_template', status_code=302, description='Downloading template for marks')
 async def download_template(request: Request, db: Session = Depends(get_db)):
     token_data = None
@@ -100,6 +104,7 @@ async def download_template(request: Request, db: Session = Depends(get_db)):
 
     return FileResponse(settings.mark_template_path, media_type='text/csv',
                         filename='template_marks.csv')
+
 
 
 # Uploading marks in a file

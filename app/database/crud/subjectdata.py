@@ -32,6 +32,7 @@ def create_subject(subject: schema.Subject, db: Session = Depends(get_db)):
     return new_subject
 
 
+# Deleting a subject with its teacher from db and students associated with it
 def delete_subject(subjectid: str, db: Session = Depends(get_db)):
     try:
         # Get teacherid from subject

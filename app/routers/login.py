@@ -1,4 +1,3 @@
-from turtle import ht
 from fastapi import APIRouter, status, Request, Response, Form, Depends
 from fastapi.responses import RedirectResponse, Response
 from fastapi.templating import Jinja2Templates
@@ -42,10 +41,12 @@ async def login(user_credentials: OAuth2PasswordRequestForm = Depends(), db: Ses
         response.set_cookie('access_token', value=access_token, httponly=True)
         return response
 
+
 # Rendering login page
 @router.get('/login', status_code=status.HTTP_202_ACCEPTED, description='Used to render the login page')
 async def user_login(request: Request, invalid: bool = False):
     return templates.TemplateResponse('unprotected/login.html', {'request': request, 'invalid': invalid})
+
 
 
 # Deleting cookie and redirecting to login page
@@ -54,6 +55,7 @@ async def user_logout(request: Request, response: Response):
     response = RedirectResponse('/login', status_code=302)
     response.delete_cookie('access_token')
     return response
+
 
 
 # Rendering chaneg password page

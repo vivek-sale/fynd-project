@@ -1,9 +1,8 @@
-from fastapi import APIRouter, UploadFile,status, Depends, Form, Request, File
-from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
+from fastapi import APIRouter, status, Depends, Request, File
+from fastapi.responses import RedirectResponse
 from app.database.database import get_db
 from fastapi.templating import Jinja2Templates
 from app.database import model
-from app.metadata import schema
 from app.database.crud import subjectdata, userdata, classdata
 from sqlalchemy.orm import Session
 from app.auth.oauth2 import get_current_user
@@ -15,7 +14,7 @@ templates = Jinja2Templates(directory="templates")
 
 # Marklist creation route
 @router.get('/marksheet/{id}', status_code=status.HTTP_202_ACCEPTED, description='This route renders a marksheet for the student. Admin and student both can access this route')
-def get_marklist(request : Request, id : str, db : Session = Depends(get_db)):
+async def get_marklist(request : Request, id : str, db : Session = Depends(get_db)):
     token_data = None
     try:
         token : str = request.cookies.get('access_token')

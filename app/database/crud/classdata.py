@@ -10,6 +10,7 @@ from app.metadata import schema
 from app.utils.marks_validator import marks_validator
 
 
+
 # This file contains all the database operations on classdata table
 
 def extract(studentlst: list, db: Session = Depends(get_db)):
@@ -45,6 +46,7 @@ def extract(studentlst: list, db: Session = Depends(get_db)):
     return errors
 
 
+
 # Add student for subject
 def add_student(id: str, subjectid: str, db: Session = Depends(get_db)):
     student = {'id': id, 'subjectid': subjectid}
@@ -53,12 +55,15 @@ def add_student(id: str, subjectid: str, db: Session = Depends(get_db)):
     db.commit()
     return False
 
+
 # Check if student is present in maindb
 def check_student_main(id: str, db: Session = Depends(get_db)):
     stud = db.query(model.MainDB).filter(model.MainDB.id == id).first()
     if not stud:
         return False
     return True
+
+
 
 # Check if student is present for given id and subject
 def check_student(id: str, subjectid: str, db: Session = Depends(get_db)):
@@ -69,6 +74,7 @@ def check_student(id: str, subjectid: str, db: Session = Depends(get_db)):
         return True
     return False
 
+
 # Get all data from classdata
 def get_all_marks(db: Session = Depends(get_db)):
     entity = db.query(model.ClassData).all()
@@ -76,6 +82,7 @@ def get_all_marks(db: Session = Depends(get_db)):
         return None
     else:
         return entity
+
 
 
 # Delete a student from class
@@ -96,6 +103,7 @@ def delete_student(id: str, db: Session = Depends(get_db)):
     return True
 
 
+
 # Get marks for all subjects of a student
 def get_all_marks_student(id: str, db: Session = Depends(get_db)):
     entity = db.query(model.ClassData).filter(model.ClassData.id == id).all()
@@ -104,12 +112,15 @@ def get_all_marks_student(id: str, db: Session = Depends(get_db)):
     else:
         return entity
 
+
 # Add subject to the class and assign it to all students
 def add_subject_to_class(subjectid: str, db: Session = Depends(get_db)):
     students = get_all_students_from_class(db=db)
     for student in students:
         add_student(id=student.id, subjectid=subjectid, db=db)
     return
+
+
 
 # Get marks for a subject of all students
 def get_all_marks_subject(subjectid: str, db: Session = Depends(get_db)):
@@ -119,6 +130,8 @@ def get_all_marks_subject(subjectid: str, db: Session = Depends(get_db)):
     else:
         return students
 
+
+
 # Get marks of a subject for specific subject
 def get_marks_for_student_of_subject(studentid: str, subjectid: str, db: Session = Depends(get_db)):
     marks = db.query(model.ClassData).filter(model.ClassData.id == studentid).filter(
@@ -127,6 +140,8 @@ def get_marks_for_student_of_subject(studentid: str, subjectid: str, db: Session
         return None
     else:
         return marks
+
+
 
 # Update marks of a given student subject combo
 def update_marks(studentid: str, subjectid: str, ise: int, mse: int, ese: int, db: Session = Depends(get_db)):
@@ -141,6 +156,7 @@ def update_marks(studentid: str, subjectid: str, ise: int, mse: int, ese: int, d
     marks.grade = marks_validator(total=marks.total, param=subject.gradeparam)
     db.commit()
     return True
+
 
 
 # Bulkuploading marks 

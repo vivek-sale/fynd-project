@@ -3,12 +3,14 @@ from sqlalchemy.orm import Session
 from app.database.database import get_db
 from app.database import model
 
+
 # Get all who are teachers
 def get_all_teachers(db: Session = Depends(get_db)):
     teachers = db.query(model.MainDB.id, model.MainDB.fullname).filter(model.MainDB.role == 'TEACHER').all()
     if not teachers:
         return None
     return teachers
+
 
 # Get all who are students
 def get_all_students(db: Session = Depends(get_db)):

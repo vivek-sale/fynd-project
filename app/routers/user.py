@@ -9,6 +9,7 @@ from app.auth.password_validator import hash
 
 router = APIRouter(tags=['user'], include_in_schema=False)
 
+
 # this was used to configure logininfo 
 @router.post('/user', status_code=status.HTTP_201_CREATED, description='Route for adding a user to logindb')
 async def usercreate(user: schema.User = Depends(schema.User.as_form), db: Session = Depends(get_db)):

@@ -21,6 +21,7 @@ def create_user(user: schema.User, db: Session = Depends(get_db)):
     db.refresh(new_user)
     return new_user
 
+
 # Delete a user from logininfo
 def delete_user(id: str, db: Session = Depends(get_db)):
     try:
@@ -51,6 +52,7 @@ def get_user(username: str, db: Session = Depends(get_db)):
     return user
 
 
+
 def add_login_with_id(id: str, db: Session = Depends(get_db)):
     user = get_student_from_id(id=id, db=db)
     new_user = model.LoginData(id=user.id, email=user.email, password=hash(str(user.dob)), role=user.role)
@@ -62,6 +64,7 @@ def add_login_with_id(id: str, db: Session = Depends(get_db)):
         return None
     db.refresh(new_user)
     return None
+
 
 # Delete from logininfo
 def delete_login(id: str, db: Session = Depends(get_db)):

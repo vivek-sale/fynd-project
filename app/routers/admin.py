@@ -1,6 +1,5 @@
 from fastapi import APIRouter, UploadFile, status, Depends, Form, Request, File, BackgroundTasks
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.database.database import get_db
 from app.auth.oauth2 import get_current_user

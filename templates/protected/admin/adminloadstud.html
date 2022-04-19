@@ -22,11 +22,11 @@
         
         <div class="card-body d-flex flex-row justify-content-between ">
             
-            <strong><h1>SUCCEEDED IN INSERTING : </h1></strong>
+            <strong><h3>SUCCEEDED IN INSERTING : </h3></strong>
 
             <ul>
                 {% for sumval in summary.success %}
-                    <li><h3>{{sumval}}<h3></li>
+                    <li><h5>{{sumval}}<h5></li>
                 {% endfor %}
             </ul>
         </div>
@@ -35,11 +35,11 @@
     <div class="container card mt-4 align-items-center">
        
         <div class="card-body d-flex flex-row justify-content-between ">
-            <strong><h1>DUPLICATE RECORDS : </h1></strong>
+            <strong><h3>DUPLICATE RECORDS : </h3></strong>
 
             <ul>
                 {% for sumval in summary.repeat %}
-                    <li><h3>{{sumval}}<h3></li>
+                    <li><h5>{{sumval}}<h5></li>
                 {% endfor %}
             </ul>
 
@@ -48,11 +48,11 @@
     </div>    <div class="container card mt-4 align-items-center">
         
         <div class="card-body d-flex flex-row justify-content-between ">
-            <strong><h1>INVALID RECORDS : </h1></strong>
+            <strong><h3>INVALID RECORDS : </h3></strong>
 
             <ul>
                 {% for sumval in summary.invalid %}
-                    <li><h3>{{sumval}}<h3></li>
+                    <li><h5>{{sumval}}<h5></li>
                 {% endfor %}
             </ul>
 
