@@ -25,18 +25,19 @@
     <div class="container card mt-4 align-items-center">
         <div class="card-body d-flex flex-row justify-content-between ">
             <style type="text/css">
-                .tg  {border-collapse:collapse;border-color:#C44D58;border-spacing:0; max-width: auto;max-height: auto;}
+                .tg  {border-collapse:collapse;border-color:#C44D58;border-spacing:0; max-width: auto;max-height: auto;width:700px; height:400px;}
                 .tg td{background-color:#F9CDAD;border-color:#C44D58;border-style:solid;border-width:0px;color:#002b36;
                   font-family:Arial, sans-serif;font-size:8px;overflow:hidden;padding:10px 16px;word-break:normal;}
                 .tg th{background-color:#FE4365;border-color:#C44D58;border-style:solid;border-width:0px;color:#fdf6e3;
                   font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 16px;word-break:normal;}
-                .tg .tg-i49k{background-color:#ffce93;text-align:left;vertical-align:top}
-                .tg .tg-cxgh{background-color:#ffcb2f;text-align:left;vertical-align:top}
-                .tg .tg-u4ur{background-color:#ffcc67;text-align:left;vertical-align:top}
-                .tg .tg-kftd{background-color:#efefef;text-align:left;vertical-align:top}
-                .tg .tg-73oq{border-color:#000000;text-align:left;vertical-align:top}
-                .tg .tg-feht{background-color:#ffccc9;border-color:#000000;text-align:left;vertical-align:top}
-                .tg .tg-og4q{background-color:#fd6864;text-align:left;vertical-align:top}
+                .tg .tg-i49k{background-color:#ffce93;text-align:left;vertical-align:top;font-size: 18px !important;}
+                .tg .tg-cxgh{background-color:#ffcb2f;text-align:left;vertical-align:top;font-size: 18px !important;}
+                .tg .tg-u4ur{background-color:#ffcc67;text-align:left;vertical-align:top;font-size: 18px !important;}
+                .tg .tg-kftd{background-color:#efefef;text-align:left;vertical-align:top;font-size: 18px !important;}
+                .tg .tg-73oq{border-color:#000000;text-align:left;vertical-align:top;font-size: 27px !important;
+    text-align: center}
+                .tg .tg-feht{background-color:#ffccc9;border-color:#000000;text-align:left;vertical-align:top; font-size: 18px !important;}
+                .tg .tg-og4q{background-color:#fd6864;text-align:left;vertical-align:top; font-size: 18px !important;}
                 </style>
                 <table class="tg">
                 <thead>
@@ -47,12 +48,12 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td class="tg-73oq" colspan="4">Student ID : {{student.id}}</td>
+                        <td class="tg-i49k" colspan="4">Student ID : {{student.id}}</td>
                         <td class="tg-i49k" colspan="3">Student NAME : {{student.fullname}}</td>
                     </tr>
                   <tr>
                     <td class="tg-feht" colspan="4">Class : {{student.cls}}       Gender : {{student.gender}}</td>
-                    <td class="tg-og4q" colspan="3"></td>
+                    <td class="tg-og4q" colspan="3">Addess : {{student.address}}</td>
                   </tr>
                   <tr>
                     <td class="tg-cxgh" colspan="2">Subject ID</td>
