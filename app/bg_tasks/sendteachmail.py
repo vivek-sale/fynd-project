@@ -7,10 +7,10 @@ conf = ConnectionConfig(
     MAIL_USERNAME=settings.mail_username,
     MAIL_PASSWORD= settings.mail_password,
     MAIL_FROM=settings.mail_username,
-    MAIL_PORT = 587,
+    MAIL_PORT = 465,
     MAIL_SERVER='smtp.gmail.com',
-    MAIL_TLS=True,
-    MAIL_SSL=False
+    MAIL_TLS=False,
+    MAIL_SSL=True
 )
 
 
