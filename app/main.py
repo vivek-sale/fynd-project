@@ -2,6 +2,8 @@ from fastapi import FastAPI,Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from app.routers import login, user, admin, student, teacher
+from fastapi.exception_handlers import http_exception_handler
+from starlette.exceptions import HTTPException
 
 
 app = FastAPI(title="ABCXYZ School Results",
@@ -27,3 +29,10 @@ async def homepage(request: Request):
          description='This route is called when there is any unauthorised response like expiration of cookie, accessing unauthorised route etc.')
 async def homepage(request: Request):
     return templates.TemplateResponse('unprotected/unauthorised.html', {'request': request, 'message': 'Unauthorised'})
+
+@app.exception_handler(HTTPException)
+async def my_custom_exception_handler(request: Request, exc: HTTPException):
+    if exc.status_code == 404:
+        return templates.TemplateResponse('unprotected/notfound.html', {'request': request})
+    else:
+        return await http_exception_handler(request, exc)
