@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Latest compiled and minified CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script type="text/javascript">
+        $(window).load(function(){
+            $('#myModal').modal('show');
+         });
+   </script>
+    <title>Marksheet</title>
+</head>
+<body>
+    {% if role == 'STUDENT' %}
+    <button class="btn btn-primary mb-2" style="float: right;" onclick="window.location.href='/logout'">EXIT</button>
+    {% elif role == 'ADMIN' %}
+    <button class="btn btn-primary mb-2" style="float: right;" onclick="window.location.href='/admin/student'">EXIT</button>
+    {% endif %}
+    <div class="container card mt-4 align-items-center">
+        <div class="card-body d-flex flex-row justify-content-between ">
+            <style type="text/css">
+                .tg  {border-collapse:collapse;border-color:#C44D58;border-spacing:0; max-width: auto;max-height: auto;width:700px; height:400px;}
+                .tg td{background-color:#F9CDAD;border-color:#C44D58;border-style:solid;border-width:0px;color:#002b36;
+                  font-family:Arial, sans-serif;font-size:8px;overflow:hidden;padding:10px 16px;word-break:normal;}
+                .tg th{background-color:#FE4365;border-color:#C44D58;border-style:solid;border-width:0px;color:#fdf6e3;
+                  font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;padding:10px 16px;word-break:normal;}
+                .tg .tg-i49k{background-color:#ffce93;text-align:left;vertical-align:top;font-size: 18px !important;}
+                .tg .tg-cxgh{background-color:#ffcb2f;text-align:left;vertical-align:top;font-size: 18px !important;}
+                .tg .tg-u4ur{background-color:#ffcc67;text-align:left;vertical-align:top;font-size: 18px !important;}
+                .tg .tg-kftd{background-color:#efefef;text-align:left;vertical-align:top;font-size: 18px !important;}
+                .tg .tg-73oq{border-color:#000000;text-align:left;vertical-align:top;font-size: 27px !important;
+    text-align: center}
+                .tg .tg-feht{background-color:#ffccc9;border-color:#000000;text-align:left;vertical-align:top; font-size: 18px !important;}
+                .tg .tg-og4q{background-color:#fd6864;text-align:left;vertical-align:top; font-size: 18px !important;}
+                </style>
+                <table class="tg">
+                <thead>
+                    <tr>
+                        <th class="tg-73oq" colspan="7"><strong>ABCXYZ SCHOOL</strong></th>
+                    </tr>
+                  
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="tg-i49k" colspan="4">Student ID : {{student.id}}</td>
+                        <td class="tg-i49k" colspan="3">Student NAME : {{student.fullname}}</td>
+                    </tr>
+                  <tr>
+                    <td class="tg-feht" colspan="4">Class : {{student.cls}}       Gender : {{student.gender}}</td>
+                    <td class="tg-og4q" colspan="3">Addess : {{student.address}}</td>
+                  </tr>
+                  <tr>
+                    <td class="tg-cxgh" colspan="2">Subject ID</td>
+                    <td class="tg-u4ur" colspan="3">Subject Name</td>
+                    <td class="tg-cxgh">Marks</td>
+                    <td class="tg-u4ur">Grade</td>
+                  </tr>
+                  {% for mark in marks %}
+                  <tr>
+                    {% for subject in subjects %}
+                    {% if mark.subjectid == subject.subjectid %}
+                    <td class="tg-kftd" colspan="2">{{mark.subjectid}}</td>
+                    <td class="tg-kftd" colspan="3">{{subject.subjectname}}</td>
+                    <td class="tg-kftd">{{mark.total}}</td>
+                    <td class="tg-kftd">{{mark.grade}}</td>
+                    {% endif %}
+                    {% endfor %}
+                  </tr>
+                  {% endfor %}
+                  <tr>
+                    <td class="tg-cxgh" colspan="2">Total Marks</td>
+                    <td class="tg-u4ur" >{{total_marks}}</td>
+                    <td class="tg-u4ur">Out of</td>
+                    <td class="tg-cxgh">{{maxmarks}}</td>
+                    <td class="tg-u4ur">Grade</td>
+                    <td class="tg-u4ur">{{finalgrade}}</td>
+                  </tr>
+                </tbody>
+                </table>
+        </div>
+    </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>          
+</body>
+</html>

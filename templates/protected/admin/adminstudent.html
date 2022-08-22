@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Latest compiled and minified CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+        body{
+    background-color:rgb(236, 234, 232);
+}
+img {
+   width: 100%;
+   border-radius: 10px;
+}
+.image{
+    width: 30%;
+}
+.details{
+    width: 70%;
+    margin: 12px
+}
+.card {
+    border-radius: 20px;
+}
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+}
+
+.topnav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #04AA6D;
+  color: white;
+}
+
+.topnav .icon {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .topnav a:not(:first-child) {display: none;}
+  .topnav a.icon {
+    float: right;
+    display: block;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .topnav.responsive {position: relative;}
+  .topnav.responsive .icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .topnav.responsive a {
+    float: none;
+    display: block;
+    text-align: left;
+  }
+}
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted rgb(36, 34, 34); /* If you want dots under the hoverable text */
+  }
+  
+  /* Tooltip text */
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: rgb(61, 60, 60);
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+  }
+    </style>
+    <title>Students</title>
+</head>
+<body>
+    <div class="topnav" id="myTopnav">
+        <a href="/admin/home">Home</a> 
+        <a href="#myModal" data-bs-toggle="modal" data-bs-target="#myModalNew">Add Students</a>
+        <a href="#students" class="active">Students</a>
+        <a href="/docs">Docs</a>
+        <a href="/changepassword">Change Password</a>
+        <a href="/logout">Logout</a>
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+        <i class="fa fa-bars"></i>
+        </a>
+  </div>
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4>Marks</h4>
+            </div>
+        </div>
+                <div>
+                    <div class="card">
+                    <div class="card-body d-flex flex-row justify-content-between align-items-center">
+                        <div class="details">
+                            {% if subjects != None %}
+                            <div class="footer d-flex flex-row justify-content-between align-items-center">
+                                <style type="text/css">
+                                    .tg  {border-collapse:collapse;border-spacing:0;}
+                                    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                                      overflow:hidden;padding:10px 16px;word-break:normal;}
+                                    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+                                      font-weight:normal;overflow:hidden;padding:10px 16px;word-break:normal;}
+                                    .tg .tg-2fdn{border-color:#9b9b9b;text-align:left;vertical-align:top}
+                                    .tg .tg-i40o{border-color:#fffe65;text-align:left;vertical-align:top}
+                                    .tg .tg-gpog{border-color:#ffccc9;text-align:left;vertical-align:top}
+                                    .tg .tg-muar{border-color:#fe996b;text-align:center;vertical-align:top}
+                                    </style>
+                                    <table class="tg">
+                                    <thead>
+                                      <tr>
+                                        <th class="tg-gpog" rowspan="2"><h4>STUDENT ID</h4></th>
+                                        <th class="tg-gpog" rowspan="2"><h4>STUDENT NAME</h4></th>
+                                        {% for subject in subjects %}
+                                            <th class="tg-muar" colspan="2"><h4>{{subject.subjectname}}</h4></th>
+                                        {% endfor %}
+                                      </tr>
+                                      <tr>
+                                          
+                                        {% for subject in subjects %}
+                                            <th class="tg-i40o">MARKS</th>
+                                            <th class="tg-i40o">GRADES</th>
+                                        {% endfor %}
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for student in students %}
+                                            <tr>
+                                                <td class="tg-2fdn"><a href='/marksheet/{{student.id}}'>{{student.id}}</a></td>
+                                                <td class="tg-2fdn">{{student.fullname}}</td>
+                                                {% for subject in subjects %}
+                                                    {% for class in classdata%}
+                                                        {% if ((class.subjectid == subject.subjectid) and (class.id==student.id)) %}
+                                                        <td class="tg-2fdn">{{class.total}}</td>
+                                                        <td class="tg-2fdn">{{class.grade}}</td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                
+                                                    
+                                                {% endfor %}
+                                                <td class="tg-2fdn">
+                                                    <button onclick="deleteStudent('{{student.id}}');" type="button" class="btn btn-danger mb-2" style="float: right;" >
+                                                        DELETE
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    </table>
+                            </div>
+                    </div>
+                    {% endif %}
+                    </div>
+                </div>
+    </div>
+    <div class="modal fade" id="myModalNew">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"  style="color: brown;">Add New Students</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/loadstudent" method="POST" enctype="application/x-www-form-urlencoded" id="addstud">
+                        <input type="text" id="students" name="students" placeholder="Enter Student number in CSV" class="form-control">
+                        <button type="reset" class="btn btn-info " form="addstud">RESET</button>
+                        <button type="submit" class="btn btn-primary" form="addstud">SAVE</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <form action="/admin/bulkloadstudent" method="POST" enctype="multipart/form-data" id="bulkstud">
+                        <a href="/admin/student/get_template" class="form-control">Download Template</a>
+                        <label>Enter csv file similar to template</label>
+                        <input type="file" id="bulkfile" name="bulkfile" accept="text/csv" class="form-control">
+                        <button type="submit" class="btn btn-primary">UPLOAD</button>
+                    </form>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">CLOSE</button>
+                </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    
+  async function deleteStudent(id) {
+    var del = confirm("Are you sure want to delete student "+id);
+    if (del){
+      const res = await fetch("/admin/student/delete/" + id, {
+        method: "DELETE",
+      }).then((response) => response.json());
+      window.location.reload();
+      }
+    }
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"></script>
+</html>
